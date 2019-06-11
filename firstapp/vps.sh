@@ -27,13 +27,16 @@ EOF
 # write out apache config file to .wsgi
 cd /etc/apache2/sites-available
 sudo chown -R $USER /etc/apache2
+# as a note, WSGIDaemonProcess may need as basis of requirements to 
+# permissions of user or path require or not require additional flags
+# e.g., python-path=directory:directory and user=username
 cat <<EOF > hello.conf
 <VirtualHost *>
         ServerName example.com
 
         WSGIScriptAlias / /var/www/flask-web-services/firstapp/hello.wsgi
-        WSGIDaemonProcess hello python-path=/var/www/flask-web-services/firstapp:/usr/local/lib/python2.7/site-packages
-        <Directory /var/www/flask-web-services/firstapp>
+        WSGIDaemonProcess hello
+	<Directory /var/www/flask-web-services/firstapp>
                 WSGIProcessGroup hello
                 WSGIApplicationGroup %{GLOBAL}
                         Order deny,allow
