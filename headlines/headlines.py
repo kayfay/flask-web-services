@@ -11,8 +11,6 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
              'redit' : "https://www.reddit.com/r/MachineLearning/.rss",
              'mit'   : "http://news.mit.edu/rss/topic/machine-learning"}
 
-
-
 @app.route("/")
 @app.route("/<publication>")
 def get_news(publication="bigml"):
@@ -21,9 +19,9 @@ def get_news(publication="bigml"):
     return """<html>
       <body>
           <h1> ML Headlines </h1>
-          <b><{0}</b> <br />
-          <i><{1}</i> <br />
-          <p><{2}</p> <br />
+          <b>{0}</b> </ br>
+          <i>{1}</i> </ br>
+          <p>{2}</p> </ br>
       </body>
     </html>""".format(first_article.get("title"),
                       first_article.get("published"),
