@@ -1,0 +1,4 @@
+https://www.reddit.com/r/MachineLearning/.rss
+https://news.google.com/news?cf=all&hl=en&pz=1&ned=us&q=Machine+Learning&output=rss
+https://blog.bigml.com/feed
+http://news.mit.edu/rss/topic/machine-learning
