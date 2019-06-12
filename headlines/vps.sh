@@ -11,21 +11,23 @@ sudo apt-get install apache
 sudo apt-get install libapache2-mod-wsgi
 sudo apt-get install git
 # configure to process RSS feeds
-sudo apt-get install --user feedparser
+pip install --user feedparser
 
-# assuming <git-url> is gitrepourl to git repo for hello.py
+# assuming <git-url> is gitrepourl to git repo for headlines.py app
 gitrepourl='flask-web-services'
 cd /var/www
 sudo chown -R $USER /var/www
 # the repository
-git clone https://github.com/kayfay/flask-web-services.git
+# git clone https://github.com/kayfay/flask-web-services.git
+# in this case repo exists so no need to clone a repo when can pull
+git pull
 cd /var/www/$gitrepourl/headlines
 
-# write out hello.wsgi for webserver gateway interface
-cat <<EOF > hello.wsgi
+# write out headlines.wsgi for webserver gateway interface
+cat <<EOF > headlines.wsgi
 import sys
-sys.path.insert(0, "/var/www/flask-web-services/headlines
-from hello import app as application
+sys.path.insert(0, "/var/www/flask-web-services/headlines")
+from headlines import app as application
 EOF
 
 # write out apache config file to .wsgi
@@ -34,14 +36,14 @@ sudo chown -R $USER /etc/apache2
 # as a note, WSGIDaemonProcess may need as basis of requirements to 
 # permissions of user or path require or not require additional flags
 # e.g., python-path=directory:directory and user=username
-cat <<EOF > hello.conf
+cat <<EOF > headlines.conf
 <VirtualHost *>
         ServerName example.com
 
-        WSGIScriptAlias / /var/www/flask-web-services/headlines/hello.wsgi
-        WSGIDaemonProcess hello
+        WSGIScriptAlias / /var/www/flask-web-services/headlines/headlines.wsgi
+        WSGIDaemonProcess headlines 
 	<Directory /var/www/flask-web-services/headlines>
-                WSGIProcessGroup hello
+                WSGIProcessGroup headlines
                 WSGIApplicationGroup %{GLOBAL}
                         Order deny,allow
                         Allow from all
@@ -51,8 +53,8 @@ EOF
 
 # configure apache to serve flask as default index
 sudo a2dissiet 000-default.conf
-sudo a2ensite hello.conf
-sudo systemctl apache2 reload
+sudo a2ensite headlines.conf
+sudo systemctl reload apache2 # manager varies by system
 
 # monitor for error messages
 sudo tail -f /var/log/apache2/error.log
