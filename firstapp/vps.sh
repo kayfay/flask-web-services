@@ -14,6 +14,8 @@ sudo apt-get install git
 # assuming <git-url> is gitrepourl to git repo for hello.py
 gitrepourl='flask-web-services'
 cd /var/www
+# clone into vps or git pull
+git clone https://github.com/kayfay/flask-web-services.git
 sudo chown -R $USER /var/www
 cd /var/www/$gitrepourl/firstapp
 
