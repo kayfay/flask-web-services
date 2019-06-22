@@ -17,4 +17,5 @@ generate with notes)
    1. 'headlines/headlines.py' and 'headlines/vps.sh' moved to 'headlines/backup'
    2. 'headlines/headlines.py' now renders feeds using Jinja to loop RSS news feeds in html
    3. 'headlines/templates.html' uses references for feed indexing
+
 ![flask_book.png](https://github.com/kayfay/flask-web-services/raw/master/flask_book.png)
