@@ -1,6 +1,6 @@
-# Using google-cloud-sdk, install sdk
+# Here we're using google-cloud-sdk, so install the sdk
 # Create instance with gcloud instance create, enable with http
-# ssh into gcloud via sdk
+# ssh into gcloud via sdk and run the script or lines needed
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
