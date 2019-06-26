@@ -4,6 +4,7 @@ Docstring: RSS Feed webapp
 import feedparser
 from flask import Flask
 from flask import render_template
+from flask import request
 
 app = Flask(__name__)
 
@@ -13,8 +14,12 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
              'mit'   : "http://news.mit.edu/rss/topic/machine-learning"}
 
 @app.route("/")
-@app.route("/<publication>")
-def get_news(publication="bigml"):
+def get_news():
+    query = request.args.get("publication")
+    if not query or query.lower() not in RSS_FEEDS:
+        publication = "bigml"
+    else:
+        publication = query.lower()
     feed = feedparser.parse(RSS_FEEDS[publication])
     return render_template("home.html", articles=feed['entries'])
 
