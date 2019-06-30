@@ -21,7 +21,7 @@ sudo chown -R $USER /var/www
 # git clone https://github.com/kayfay/flask-web-services.git
 # in this case repo exists so no need to clone a repo when can pull
 git pull
-cd /var/www/$gitrepourl/headlines/templates
+cd /var/www/$gitrepourl/headlines
 
 # write out headlines.wsgi for webserver gateway interface
 cat <<EOF > headlines.wsgi
