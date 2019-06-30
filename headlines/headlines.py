@@ -27,10 +27,12 @@ def home():
     the page based on news and weather functions.
     """
     # get customized headlines based on user input of default
+    publication = request.args.get('publication')
     if not publication:
         publication = DEFAULTS['publication']
     articles = get_news(publication)
     # get customized weather based on user input or default
+    city = request.args.get('city')
     if not city:
         publication = DEFAULTS['city']
     publication = get_weather(city)
