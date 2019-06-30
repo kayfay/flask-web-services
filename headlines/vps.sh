@@ -21,12 +21,12 @@ sudo chown -R $USER /var/www
 # git clone https://github.com/kayfay/flask-web-services.git
 # in this case repo exists so no need to clone a repo when can pull
 git pull
-cd /var/www/$gitrepourl/templates
+cd /var/www/$gitrepourl/headlines/templates
 
 # write out headlines.wsgi for webserver gateway interface
 cat <<EOF > headlines.wsgi
 import sys
-sys.path.insert(0, "/var/www/flask-web-services/templates")
+sys.path.insert(0, "/var/www/flask-web-services/headlines")
 from headlines import app as application
 EOF
 
@@ -40,7 +40,7 @@ cat <<EOF > headlines.conf
 <VirtualHost *>
         ServerName example.com
 
-        WSGIScriptAlias / /var/www/flask-web-services/headlines/headlines.wsgi
+        WSGIScriptAlias / /var/www/flask-web-services/headlines/templates/headlines.wsgi
         WSGIDaemonProcess headlines 
 	<Directory /var/www/flask-web-services/headlines>
                 WSGIProcessGroup headlines

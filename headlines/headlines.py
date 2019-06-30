@@ -16,16 +16,35 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
              'redit' : "https://www.reddit.com/r/MachineLearning/.rss",
              'mit'   : "http://news.mit.edu/rss/topic/machine-learning"}
 
+DEFAULTS = {'publication' : 'bigml',
+            'city' : 'Jacksonville, FL'}
+
 @app.route("/")
+def home():
+    """Renders a homepage Jinija template.
+
+    Uses render_template from flask to create a Jinja template that modfies
+    the page based on news and weather functions.
+    """
+    # get customized headlines based on user input of default
+    if not publication:
+        publication = DEFAULTS['publication']
+    articles = get_news(publication)
+    # get customized weather based on user input or default
+    if not city:
+        publication = DEFAULTS['city']
+    publication = get_weather(city)
+
+    return render_template("home.html", articles=articles, weather=weather)
+
 def get_news():
     query = request.args.get("publication")
     if not query or query.lower() not in RSS_FEEDS:
-        publication = "bigml"
+        publication = DEFAULTS["publication"]
     else:
         publication = query.lower()
     feed = feedparser.parse(RSS_FEEDS[publication])
-    weather = get_weather("Jacksonville, Fl")
-    return render_template("home.html", articles=feed['entries'], weather=weather)
+    return feed['entries']
 
 def get_weather(query):
     api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid="
@@ -35,9 +54,11 @@ def get_weather(query):
     parsed = json.loads(data)
     weather = None
     if parsed.get("weather"):
+        weather = \
         {"description" : parsed["weather"][0]["description"],
          "temperature" : parsed["main"]["temp"],
-         "city" : parsed["name"]}
+         "city" : parsed["name"]
+         "country" : parsed['sys']['country']}
     return weather
 
 
