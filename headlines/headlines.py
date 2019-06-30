@@ -39,8 +39,7 @@ def home():
 
     return render_template("home.html", articles=articles, weather=weather)
 
-def get_news():
-    query = request.args.get("publication")
+def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
         publication = DEFAULTS["publication"]
     else:
