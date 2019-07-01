@@ -37,7 +37,7 @@ def home():
     # get customized weather based on user input or default
     city = request.args.get('city')
     if not city:
-        publication = DEFAULTS['city']
+        city = DEFAULTS['city']
     weather = get_weather(city)
 
     return render_template("home.html", articles=articles, weather=weather)
