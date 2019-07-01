@@ -17,9 +17,10 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
              'mit'   : "http://news.mit.edu/rss/topic/machine-learning"}
 
 DEFAULTS = {'publication' : 'bigml',
-            'city' : 'Jacksonville, FL'}
+            'city' : 'Jacksonville'}
 
-API_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid="
+API_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=45da5f9a7db0f15fa1ee596e17cfa2b7"
+
 
 @app.route("/")
 def home():
