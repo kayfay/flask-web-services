@@ -38,7 +38,7 @@ def home():
     city = request.args.get('city')
     if not city:
         publication = DEFAULTS['city']
-    publication = get_weather(city)
+    weather = get_weather(city)
 
     return render_template("home.html", articles=articles, weather=weather)
 
@@ -51,7 +51,7 @@ def get_news(query):
     return feed['entries']
 
 def get_weather(query):
-    query = urllib.parse.quote(query)
+    query = urllib.quote(query)
     url = API_URL.format(query)
     data = urllib2.urlopen(url).read()
     parsed = json.loads(data)
