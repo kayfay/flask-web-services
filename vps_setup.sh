@@ -1,6 +1,9 @@
 # Here we're using google-cloud-sdk, so install the sdk
 # Create instance with gcloud instance create, enable with http
 # ssh into gcloud via sdk and run the script or lines needed
+# 	in this instance we can use to start and ssh into it
+#  gcloud compute instances start instance-1 --zone=us-central1-a
+#  gcloud compute ssh instance-1 --zone=us-central1-a
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"

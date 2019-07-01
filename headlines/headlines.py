@@ -17,10 +17,13 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
              'mit'   : "http://news.mit.edu/rss/topic/machine-learning"}
 
 DEFAULTS = {'publication' : 'bigml',
-            'city' : 'Jacksonville'}
+            'city' : 'Jacksonville',
+            'currency_from' : 'USD',
+            'currency_to' : 'INR'}
 
-API_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=45da5f9a7db0f15fa1ee596e17cfa2b7"
+WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=45da5f9a7db0f15fa1ee596e17cfa2b7"
 
+EXCHANGE_URL = "https://openexchangerates.org//api/latest.json?app_id=0006786932eb42d98798a620fdba059a"
 
 @app.route("/")
 def home():
@@ -39,8 +42,29 @@ def home():
     if not city:
         city = DEFAULTS['city']
     weather = get_weather(city)
+    # get customized currency based on user input or default
+    currency_from = request.args.get("currency_from")
+    if not currency_from:
+        currency_from = DEFAULTS['currency_from']
+    currency_to = request.args.get("currency_to")
+    if not currency_to:
+        currency_to = DEFAULTS['currency_to']
+    rate = get_rate(currency_from, currency_to)
 
-    return render_template("home.html", articles=articles, weather=weather)
+    return render_template("home.html",
+                           articles=articles,
+                           weather=weather,
+                           currency_from=currency_from,
+                           currency_to=currency_to,
+                           rate=rate)
+
+def get_rate(frm, to):
+    all_currency = urllib2.urlopen(CURRENCY_URL).read()
+
+    parsed = json.loads(all_currency).get('rates')
+    frm_rate = parsed.get(frm.upper())
+    to_rate = parsed.get(to.upper())
+    return to_rate/frm_rate
 
 def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
@@ -52,7 +76,7 @@ def get_news(query):
 
 def get_weather(query):
     query = urllib.quote(query)
-    url = API_URL.format(query)
+    url = WEATHER_URL.format(query)
     data = urllib2.urlopen(url).read()
     parsed = json.loads(data)
     weather = None
