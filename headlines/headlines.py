@@ -19,6 +19,8 @@ RSS_FEEDS = {'bigml' : "https://blog.bigml.com/feed",
 DEFAULTS = {'publication' : 'bigml',
             'city' : 'Jacksonville, FL'}
 
+API_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid="
+
 @app.route("/")
 def home():
     """Renders a homepage Jinija template.
@@ -48,9 +50,8 @@ def get_news(query):
     return feed['entries']
 
 def get_weather(query):
-    api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid="
     query = urllib.parse.quote(query)
-    url = api_url.format(query)
+    url = API_URL.format(query)
     data = urllib2.urlopen(url).read()
     parsed = json.loads(data)
     weather = None
