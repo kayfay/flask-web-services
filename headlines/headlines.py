@@ -59,7 +59,7 @@ def home():
                            rate=rate)
 
 def get_rate(frm, to):
-    all_currency = urllib2.urlopen(CURRENCY_URL).read()
+    all_currency = urllib2.urlopen(EXCHANGE_URL).read()
 
     parsed = json.loads(all_currency).get('rates')
     frm_rate = parsed.get(frm.upper())
