@@ -1,8 +1,10 @@
 """
 Docstring: RSS Feed webapp
 """
+import datetime
 import feedparser
 from flask import Flask
+from flask import make_response
 from flask import render_template
 from flask import request
 import json
@@ -35,7 +37,9 @@ def home():
     # get customized headlines based on user input of default
     publication = request.args.get('publication')
     if not publication:
-        publication = DEFAULTS['publication']
+        publication = request.sookies.get("publication")
+        if not publication:
+            publication = DEFAULTS['publication']
     articles = get_news(publication)
     # get customized weather based on user input or default
     city = request.args.get('city')
@@ -52,13 +56,20 @@ def home():
     rate = get_rate(currency_from, currency_to)
     rate, currencies = get_rate(currency_from, currency_to)
 
-    return render_template("home.html",
-                           articles=articles,
-                           weather=weather,
-                           currency_from=currency_from,
-                           currency_to=currency_to,
-                           rate=rate,
-                           currencies=sorted(currencies))
+    response = make_response(render_template("home.html",
+                                             article=article,
+                                             weather=weather,
+                                             currency_from=currency_from,
+                                             currency_to=currency_to,
+                                             rate=rate,
+                                             currencies=sorted(currencies)))
+    expires = datetime.datetime.naow() + datetime.timedelta(day=365)
+    response.set_cookie("publication", publication, expires=expires)
+    response.set_cookie("city", city, expires=expires)
+    response.set_cookie("currency_from", currency_from, expires=expires)
+    response.set_cookie("currency_to", currency_to, expires=expires)
+    return response
+
 
 def get_rate(frm, to):
     all_currency = urllib2.urlopen(EXCHANGE_URL).read()
