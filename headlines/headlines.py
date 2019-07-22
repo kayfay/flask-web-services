@@ -27,6 +27,13 @@ WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&
 
 EXCHANGE_URL = "https://openexchangerates.org//api/latest.json?app_id=0006786932eb42d98798a620fdba059a"
 
+def get_value_with_fallback(key):
+    if request.args.get(key):
+        return request.args.get(key)
+    if request.cookies.get(key):
+        return request.cookies.get(key)
+    return DEFAULTS[key]
+
 @app.route("/")
 def home():
     """Renders a homepage Jinija template.
@@ -35,27 +42,19 @@ def home():
     the page based on news and weather functions.
     """
     # get customized headlines based on user input of default
-    publication = request.args.get('publication')
-    if not publication:
-        publication = request.sookies.get("publication")
-        if not publication:
-            publication = DEFAULTS['publication']
+    publication = get_value_with_fallback("publication")
     articles = get_news(publication)
+
     # get customized weather based on user input or default
-    city = request.args.get('city')
-    if not city:
-        city = DEFAULTS['city']
+    city = get_value_with_fallback("city")
     weather = get_weather(city)
+
     # get customized currency based on user input or default
-    currency_from = request.args.get("currency_from")
-    if not currency_from:
-        currency_from = DEFAULTS['currency_from']
-    currency_to = request.args.get("currency_to")
-    if not currency_to:
-        currency_to = DEFAULTS['currency_to']
-    rate = get_rate(currency_from, currency_to)
+    currency_from = get_value_with_fallback("currency_from")
+    currency_to = get_value_with_fallback("currency_to")
     rate, currencies = get_rate(currency_from, currency_to)
 
+    # save cookies and return template
     response = make_response(render_template("home.html",
                                              article=article,
                                              weather=weather,
@@ -99,7 +98,6 @@ def get_weather(query):
          "city" : parsed["name"],
          "country" : parsed['sys']['country']}
     return weather
-
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
