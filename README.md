@@ -13,6 +13,9 @@ generate with notes)
    2. Four feeds are in the list BigML, Google ML news feeds, Top Reddit ML feeds, and MIT ML feeds
    3. each URL is `exampleDomain.com/bigml`, `exampleDomain.com/googl`, `exampleDomain.com/redit`, `exampleDomain.com/mit`
    4. Integrates API for openmaps and currency data
+   5. Uses cookies
+   6. Uses CSS
+
 
 3. 'headlines/templates' uses Jinja templates for HTML rendering
    1. 'headlines/headlines.py' and 'headlines/vps.sh' moved to 'headlines/backup'
