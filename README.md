@@ -1,5 +1,3 @@
-## Currently Reading https://www.packtpub.com/web-development/flask-building-python-web-services
-
  * vps_template is a template script for the virtual private servers in the cloud
 
 1. `firstapp` is a standard hello world
