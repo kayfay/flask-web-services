@@ -1,12 +1,13 @@
 """
 Docstring: RSS Feed webapp
 """
-import datetime
 import feedparser
 from flask import Flask
 from flask import make_response
 from flask import render_template
 from flask import request
+
+import datetime
 import json
 import urllib
 import urllib2
@@ -24,8 +25,8 @@ DEFAULTS = {'publication' : 'bigml',
             'currency_to' : 'INR'}
 
 WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=45da5f9a7db0f15fa1ee596e17cfa2b7"
-
 EXCHANGE_URL = "https://openexchangerates.org//api/latest.json?app_id=0006786932eb42d98798a620fdba059a"
+
 
 def get_value_with_fallback(key):
     if request.args.get(key):
@@ -33,6 +34,7 @@ def get_value_with_fallback(key):
     if request.cookies.get(key):
         return request.cookies.get(key)
     return DEFAULTS[key]
+
 
 @app.route("/")
 def home():
@@ -43,7 +45,7 @@ def home():
     """
     # get customized headlines based on user input of default
     publication = get_value_with_fallback("publication")
-    article = get_news(publication)
+    articles = get_news(publication)
 
     # get customized weather based on user input or default
     city = get_value_with_fallback("city")
@@ -56,7 +58,7 @@ def home():
 
     # save cookies and return template
     response = make_response(render_template("home.html",
-                                             article=article,
+                                             articles=articles,
                                              weather=weather,
                                              currency_from=currency_from,
                                              currency_to=currency_to,
@@ -77,12 +79,9 @@ def get_rate(frm, to):
     to_rate = parsed.get(to.upper())
     return (to_rate / frm_rate, parsed.keys())
 
+
 def get_news(query):
-    if not query or query.lower() not in RSS_FEEDS:
-        publication = DEFAULTS["publication"]
-    else:
-        publication = query.lower()
-    feed = feedparser.parse(RSS_FEEDS[publication])
+    feed = feedparser.parse(RSS_FEEDS[publication.lower()])
     return feed['entries']
 
 def get_weather(query):
