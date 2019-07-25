@@ -80,7 +80,7 @@ def get_rate(frm, to):
     return (to_rate / frm_rate, parsed.keys())
 
 
-def get_news(query):
+def get_news(publication):
     feed = feedparser.parse(RSS_FEEDS[publication.lower()])
     return feed['entries']
 
