@@ -43,7 +43,7 @@ def home():
     """
     # get customized headlines based on user input of default
     publication = get_value_with_fallback("publication")
-    articles = get_news(publication)
+    article = get_news(publication)
 
     # get customized weather based on user input or default
     city = get_value_with_fallback("city")
